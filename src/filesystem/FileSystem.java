@@ -62,7 +62,7 @@ public class FileSystem {
         parent.deleteEntry(toDelete);
     }
 
-    public Entry[] list(String path) {
+    public Entry[] list(String path, boolean showFullAddress) {
         System.out.println("Listing " + path );
         List<Entry> entries = resolve(path);
         if (entries.get(entries.size() - 1) == null) {
@@ -76,7 +76,14 @@ public class FileSystem {
         int i = 0;
         for (Entry e : parent.getContents()) {
             ret[i++] = e;
-            System.out.println(e.name);
+            if (!showFullAddress) {
+                System.out.println(e.name);
+            } else {
+                if (!path.endsWith("/"))
+                    System.out.println(path + "/"+ e.name);
+                else
+                    System.out.println(path + e.name);
+            }
         }
         return ret;
     }
@@ -97,11 +104,11 @@ public class FileSystem {
             }
         }
 
-        test.list("/");
+        test.list("/", true);
         System.out.println();
-        test.list("/level0_0");
+        test.list("/level0_0", true);
         System.out.println();
-        test.list("/level0_1");
+        test.list("/level0_1", true);
         System.out.println("Total number of items : " + test.count());
         System.out.println();
 
@@ -109,11 +116,11 @@ public class FileSystem {
         test.createFiles("/level0_file1");
         test.createFiles("/level0_0/level1_0_file1");
 
-        test.list("/");
+        test.list("/", true);
         System.out.println();
-        test.list("/level0_0");
+        test.list("/level0_0", true);
         System.out.println();
-        test.list("/level0_1");
+        test.list("/level0_1", true);
         System.out.println("Total number of items : " + test.count());
         System.out.println();
 
@@ -121,9 +128,9 @@ public class FileSystem {
         test.delete("/level0_0");
         test.delete("/level0_file1");
 
-        test.list("/");
+        test.list("/", true);
         System.out.println();
-        test.list("/level0_1");
+        test.list("/level0_1", true);
         System.out.println("Total number of items : " + test.count());
     }
 }
